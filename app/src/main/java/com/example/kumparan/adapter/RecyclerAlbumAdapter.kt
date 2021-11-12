@@ -42,7 +42,6 @@ class RecyclerAlbumAdapter(private val viewModel: UserViewModel) : RecyclerView.
         recyclerPhoto.addItemDecoration(decoration)
         recyclerPhotoAdapter = RecyclerPhotoAdapter()
         recyclerPhoto.adapter = recyclerPhotoAdapter
-//        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_album, parent, false)
         return MyViewHolder(binding)
     }
 
