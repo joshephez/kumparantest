@@ -48,7 +48,6 @@ class PostsRecylerFragment : Fragment() {
     private fun initViewModel(){
 
         val viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
-
         viewModel.getPostsObserver().observe(viewLifecycleOwner, Observer<ArrayList<Posts>> {
 
             if(it!=null){

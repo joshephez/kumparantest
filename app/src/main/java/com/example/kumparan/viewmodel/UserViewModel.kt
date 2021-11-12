@@ -23,21 +23,12 @@ import kotlinx.coroutines.launch
 
  class UserViewModel(): ViewModel() {
 
-    companion object {
-        @JvmStatic
-        @BindingAdapter("imageUrl")
-        fun loadImage(view: ImageView, urlImage: String) {
-
-            Glide.with(view.context)
-                .load(urlImage)
-                .into(view)
-        }
-    }
 
      var user : MutableLiveData<User>
     var album : MutableLiveData<ArrayList<Album>>
     var photo : MutableLiveData<ArrayList<Photos>>
 
+    var urlImage : String = ""
     var fullnameUser: String=""
     var emailUser: String =""
     var addressUser :String=""
@@ -70,6 +61,10 @@ import kotlinx.coroutines.launch
         this.addressUser =  userDetail.address!!.street.toString()+", "+userDetail.address!!.suite.toString()+", "+userDetail.address!!.city.toString()
         this.companyUser =  userDetail.company!!.name.toString()
     }
+     fun setImage(photo:Photos){
+         this.urlImage = photo.url
+
+     }
 
     fun getUserApi(id: Int?){
 
@@ -77,6 +72,7 @@ import kotlinx.coroutines.launch
             val retroInstance = ApiClient.getApiClient().create(ApiService::class.java)
             val response = retroInstance.getUserById(id)
             user.postValue(response)
+
         }
     }
     fun getPhotoApi(id: Int?){
@@ -92,7 +88,6 @@ import kotlinx.coroutines.launch
             val retroInstance = ApiClient.getApiClient().create(ApiService::class.java)
             val response = retroInstance.getAlbumById(id)
             album.postValue(response)
-
         }
     }
 
@@ -124,31 +119,34 @@ import kotlinx.coroutines.launch
             if (it != null) {
                 CoroutineScope(Dispatchers.Main).launch {
                   activity.recyclerAdapter.setUpdatedData(it)
-                    for(id in it) {
-                        print("tester>>>"+id)
-                        Log.e("testtag","masuk sini>>  "+it.size.toString())
-                    }
 
                 }
+
             } else {
                 Toast.makeText(activity, "Error get list", Toast.LENGTH_LONG)
             }
         })
     }
 
-//    @SuppressLint("ShowToast")
-//    fun initUserPhoto(id:Int?){
-//        getPhotoApi(id)
-//        getDetailPhoto().observe(activity, Observer<ArrayList<Photos>> {
-//            if (it != null) {
-//                CoroutineScope(Dispatchers.Main).launch {
-//
-//                }
-//            } else {
-//                Toast.makeText(activity, "Error get list", Toast.LENGTH_LONG)
-//            }
-//        })
-//    }
 
 
+    @SuppressLint("ShowToast")
+    fun initUserPhoto(act:UserActivity , id:Int?) {
+        getPhotoApi(id)
+        getDetailPhoto().observe(act, Observer<ArrayList<Photos>> {
+            if (it != null) {
+                CoroutineScope(Dispatchers.Main).launch {
+//                    if(act.recyclerAdapter.recyclerPhotoAdapter.items.size!=0){
+//                        act.recyclerAdapter.recyclerPhotoAdapter.addData(it)
+//                    }
+                  //  act.recyclerAdapter.initData(it)
+
+                }
+            } else {
+                Toast.makeText(act, "Error get list", Toast.LENGTH_LONG)
+            }
+        })
+
+
+    }
 }

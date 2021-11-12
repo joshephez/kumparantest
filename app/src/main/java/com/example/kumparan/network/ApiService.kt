@@ -23,7 +23,7 @@ interface ApiService {
     suspend fun getAlbumById(@Query("userId") userId: Int?): ArrayList<Album>
 
     @GET("photos")
-    suspend fun getPhotoById(@Query("id") userId: Int?): ArrayList<Photos>
+    suspend fun getPhotoById(@Query("albumId") albumId: Int?): ArrayList<Photos>
 
     @GET("comments")
     suspend fun getCommentsByPost(@Query("postId") postId : Int?): ArrayList<Comment>

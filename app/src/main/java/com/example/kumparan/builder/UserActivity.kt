@@ -1,26 +1,16 @@
 package com.example.kumparan.builder
 
-import android.annotation.SuppressLint
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kumparan.R
 import com.example.kumparan.adapter.RecyclerAlbumAdapter
-import com.example.kumparan.adapter.RecyclerCommentAdapter
+import com.example.kumparan.adapter.RecyclerPhotoAdapter
 
 import com.example.kumparan.databinding.UserScreenBinding
-import com.example.kumparan.model.Photos
-import com.example.kumparan.viewmodel.DetailViewModel
-import com.example.kumparan.viewmodel.HomeViewModel
 import com.example.kumparan.viewmodel.UserViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class UserActivity : AppCompatActivity() {
 
@@ -45,7 +35,7 @@ class UserActivity : AppCompatActivity() {
 
         viewModel.initUserDetail(this,userId)
         viewModel.initUserAlbum(this,userId)
-        initRecyclerAlbum()
+        initRecyclerAlbum(viewModel)
     }
 
 
@@ -54,14 +44,16 @@ class UserActivity : AppCompatActivity() {
         onBackPressed()
         return true
     }
-    private fun initRecyclerAlbum(){
+    private fun initRecyclerAlbum(vModel: UserViewModel){
         val recycler = binding.recyclerAlbum
         recycler.layoutManager = LinearLayoutManager(this)
         val decoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
         recycler.addItemDecoration(decoration)
-
-        recyclerAdapter = RecyclerAlbumAdapter()
+        recyclerAdapter = RecyclerAlbumAdapter(vModel)
         recycler.adapter = recyclerAdapter
+
+
     }
+
 
 }

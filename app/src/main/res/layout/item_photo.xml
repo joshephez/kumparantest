@@ -4,7 +4,7 @@
     <data>
 
         <variable
-            name="userviewmodel"
+            name="itemphotorecyclermodel"
             type="com.example.kumparan.viewmodel.UserViewModel" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -24,10 +24,14 @@
             android:id="@+id/tv_photo"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:text="@{userviewmodel.emailUser}"
             android:textSize="18sp"
             android:textStyle="bold" />
+        <ImageView
+            android:id="@+id/img_photo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
 
+/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
