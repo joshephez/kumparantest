@@ -119,6 +119,12 @@ import kotlinx.coroutines.launch
             if (it != null) {
                 CoroutineScope(Dispatchers.Main).launch {
                   activity.recyclerAdapter.setUpdatedData(it)
+//                    for(i in 1..it.size)
+//
+//                    initUserPhoto(
+//                        activity,
+//                        it[0].id
+//                    )
 
                 }
 
@@ -136,11 +142,10 @@ import kotlinx.coroutines.launch
         getDetailPhoto().observe(act, Observer<ArrayList<Photos>> {
             if (it != null) {
                 CoroutineScope(Dispatchers.Main).launch {
-//                    if(act.recyclerAdapter.recyclerPhotoAdapter.items.size!=0){
-//                        act.recyclerAdapter.recyclerPhotoAdapter.addData(it)
-//                    }
-                  //  act.recyclerAdapter.initData(it)
+                   act.recyclerAdapter.recyclerPhotoAdapter.setUpdatedData(it)
 
+//                    act.recyclerAdapter.initData(it)
+                    Log.e("halo","halooooo2>>   "+ it.size.toString())
                 }
             } else {
                 Toast.makeText(act, "Error get list", Toast.LENGTH_LONG)

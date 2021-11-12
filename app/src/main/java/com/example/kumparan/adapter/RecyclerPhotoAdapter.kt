@@ -1,5 +1,7 @@
 package com.example.kumparan.adapter
 
+import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -13,8 +15,8 @@ import com.example.kumparan.databinding.ItemPhotoBinding
 import com.example.kumparan.model.Photos
 import com.example.kumparan.ui.RecyclerPostsAdapter
 
-class RecyclerPhotoAdapter() : RecyclerView.Adapter<RecyclerPhotoAdapter.MyViewHolder>() {
-    var items = ArrayList<Photos>()
+class RecyclerPhotoAdapter(var items :ArrayList<Photos>,context :Context) : RecyclerView.Adapter<RecyclerPhotoAdapter.MyViewHolder>() {
+
 
 
     fun setUpdatedData(items :ArrayList<Photos>){
@@ -37,20 +39,12 @@ class RecyclerPhotoAdapter() : RecyclerView.Adapter<RecyclerPhotoAdapter.MyViewH
         with(holder){
             with(items.get(position)){
                 binding.tvPhoto.text = this.title
-             //   setImageUrl(binding.imgPhoto,this.url)
+
 
             }
         }
     }
     inner class MyViewHolder(val binding: ItemPhotoBinding) : RecyclerView.ViewHolder(binding.root)
-//    companion object {
-//        @JvmStatic
-//        @BindingAdapter("imageUrl")
-//        fun setImageUrl(view: ImageView, urlImage: String) {
-//            Glide.with(view.context)
-//                .load(urlImage)
-//                .into(view)
-//        }
-//    }
+
 
 }

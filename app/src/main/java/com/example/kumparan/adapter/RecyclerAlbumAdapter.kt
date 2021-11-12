@@ -1,48 +1,56 @@
 package com.example.kumparan.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.kumparan.R
 import com.example.kumparan.builder.UserActivity
 import com.example.kumparan.databinding.ItemAlbumBinding
 import com.example.kumparan.model.Album
 import com.example.kumparan.model.Photos
+import com.example.kumparan.model.Posts
+import com.example.kumparan.ui.RecyclerPostsAdapter
 import com.example.kumparan.viewmodel.UserViewModel
+import kotlinx.android.synthetic.main.item_album.view.*
 
-class RecyclerAlbumAdapter(private val viewModel: UserViewModel) : RecyclerView.Adapter<RecyclerAlbumAdapter.MyViewHolder>() {
+class RecyclerAlbumAdapter(private val viewModel: UserViewModel) :
+    RecyclerView.Adapter<RecyclerAlbumAdapter.MyViewHolder>() {
     var items = ArrayList<Album>()
     var photoItems = ArrayList<Photos>()
+    private val viewPool = RecyclerView.RecycledViewPool()
 
 
-    lateinit var recyclerPhotoAdapter : RecyclerPhotoAdapter
+    lateinit var recyclerPhotoAdapter: RecyclerPhotoAdapter
 
-    fun setUpdatedData(items: ArrayList<Album>){
+    fun setUpdatedData(items: ArrayList<Album>) {
 
         this.items = items
         notifyDataSetChanged()
     }
 
 
-    fun initData(list:ArrayList<Photos>){
-       this.photoItems = list
+    fun initData(list: ArrayList<Photos>) {
+        this.photoItems = list
         notifyDataSetChanged()
     }
-    fun setPhotoData(photoItems: ArrayList<Photos>){
+
+    fun setPhotoData(photoItems: ArrayList<Photos>) {
         this.photoItems = photoItems
         notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val binding  = ItemAlbumBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        val recyclerPhoto =  binding.rvPhoto
-        recyclerPhoto.layoutManager = LinearLayoutManager(binding.root.context,LinearLayoutManager.HORIZONTAL, false)
-        val decoration = DividerItemDecoration(binding.root.context, DividerItemDecoration.HORIZONTAL)
-        recyclerPhoto.addItemDecoration(decoration)
-        recyclerPhotoAdapter = RecyclerPhotoAdapter()
-        recyclerPhoto.adapter = recyclerPhotoAdapter
-        return MyViewHolder(binding)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_album, parent, false)
+        return MyViewHolder(view)
+//        val binding = ItemAlbumBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+//
+//        return MyViewHolder(binding)
     }
 
     override fun getItemCount(): Int {
@@ -50,24 +58,26 @@ class RecyclerAlbumAdapter(private val viewModel: UserViewModel) : RecyclerView.
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        viewModel.initUserPhoto(holder.itemView.context as UserActivity,items.get(position).id)
+        holder.bind(items.get(position))
 
-   with(holder){
-
-       with(items.get(position)){
-
-    binding.tvAlbumtitle.text = this.title
-
-    viewModel.initUserPhoto(binding.root.context as UserActivity,items[position].id)
-
-    recyclerPhotoAdapter.setUpdatedData(photoItems)
-
-
-
-       }
-   }
+        val photoLayoutManager = LinearLayoutManager(holder.itemView.rv_photo.context, LinearLayoutManager.HORIZONTAL, false)
+        holder.itemView.rv_photo.apply {
+            layoutManager = photoLayoutManager
+            recyclerPhotoAdapter = RecyclerPhotoAdapter(photoItems,holder.rvPhoto.context)
+            rv_photo.adapter = recyclerPhotoAdapter
+            setRecycledViewPool(viewPool)
+        }
 
     }
 
-    inner class MyViewHolder(val binding: ItemAlbumBinding) : RecyclerView.ViewHolder(binding.root)
+    class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val tvAlbumtitle = view.findViewById<TextView>(R.id.tv_albumtitle)
+        var rvPhoto = view.findViewById<RecyclerView>(R.id.rv_photo)
+        fun bind(data: Album) {
+            tvAlbumtitle.text = data.title
+
+        }
+    }
 }
 
